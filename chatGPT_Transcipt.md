@@ -358,3 +358,203 @@ df = spark.createDataFrame(data)
 ```
 
 In this modified code, we use the `mysql.connector` library to create a MySQL connection and fetch data from the database using a SQL query. Then we convert the resulting pandas dataframe to a PySpark dataframe using the `createDataFrame()` method of `SparkSession`. We can then perform our data processing tasks on the PySpark dataframe.
+
+> Modify the below code such that environment variables such as MYSQL\_DATABASE and MYSQL\_ROOT\_PASSWORD are set: services: mysql: build: ./mysql/. ports: - 3306:3306
+
+services: mysql: build: ./mysql/. ports: - 3306:3306 environment: MYSQL\_DATABASE: sales\_data MYSQL\_ROOT\_PASSWORD: password
+
+> Modify the below code such that it excludes the volume part and instead includes the "command" which needs to be executed in that container. data\_processing: build: ./data\_processing/. volumes: - ./output:/output - ./html:/html depends\_on: - mysql
+
+Here's the modified code that excludes the volume part and includes the "command":
+
+data\_processing: build: ./data\_processing/. depends\_on: - mysql command: \["python", "/app/data\_processing\_script.py"\]
+
+> Modify the above code such that the container runs indefinitely and does not die immediately.
+
+To modify the above code to make the container run indefinitely, add the "command" parameter with the value of "tail -f /dev/null". This will prevent the container from exiting immediately after startup. Here's the modified code:
+
+data\_processing: build: ./data\_processing/. volumes: - ./output:/output - ./html:/html depends\_on: - mysql command: tail -f /dev/null
+
+> How to write both \["python3", "/app/data\_processing\_script.py"\] and tail -f /dev/null in the command section?
+
+To run both "python3 /app/data\_processing\_script.py" and "tail -f /dev/null" in a Docker container, you can separate the two commands with the "&&" operator in the command section of the Dockerfile. Here's an example:
+
+bash
+
+```bash
+command: bash -c "python3 /app/data_processing_script.py && tail -f /dev/null"
+```
+
+This will first run the Python script and then run the tail command, which will keep the container running indefinitely.
+
+> Modify the below service of yaml file such that, the container does not die immediately. data\_processing: build: ./data\_processing/. command: bash -c "python3 /app/data\_processing\_script.py && tail -f /dev/null" depends\_on: - mysql
+
+The service can be modified as follows to keep the container running indefinitely:
+
+yaml
+
+```yaml
+data_processing:
+    build: ./data_processing/.
+    command: sh -c "python3 /app/data_processing_script.py && tail -f /dev/null"
+    depends_on:
+      - mysql
+```
+
+Here, the `bash` command is replaced with `sh` command and the `&&` operator is used to execute two commands in a single `sh` command. The `tail -f /dev/null` command will keep the container running indefinitely.
+
+> Modify "command: sh -c "python3 /app/data\_processing\_script.py && tail -f /dev/null"" command such that it executed indefinitely, thus enabling to docker container to be alive forever.
+
+To modify the command to keep the container running indefinitely, you can replace the `tail -f /dev/null` command with a simple `sleep infinity` command as shown below:
+
+bash
+
+```bash
+command: sh -c "python3 /app/data_processing_script.py && sleep infinity"
+```
+
+This will execute the `python3 /app/data_processing_script.py` command and then keep the container running indefinitely, until it is manually stopped.
+
+> Modify the above command such that the container does not die immediately.
+
+To modify the command such that the container does not die immediately, we can replace the "tail -f /dev/null" with "sleep infinity". The updated command would be:
+
+bash
+
+```bash
+command: sh -c "python3 /app/data_processing_script.py && sleep infinity"
+```
+
+This will keep the container running indefinitely until it is manually stopped.
+
+> The container is dying immediately even after the use of the above command. Please modify it.
+
+If the container is still dying immediately, it could be due to an error in the script or some other issue. However, here is another possible modification to try:
+
+bash
+
+```bash
+command: bash -c "python3 /app/data_processing_script.py & tail -f /dev/null"
+```
+
+This command runs the `data_processing_script.py` in the background using the `&` operator, and then tails the `/dev/null` file to keep the container alive.
+
+> Identify the problem in below script which is leading to some error and therefore the container for this application could not be build. import pyspark.sql.functions as F import mysql.connector from pyspark.sql import SparkSession # MySQL database configuration mysql\_host = "localhost" mysql\_user = "root" mysql\_password = "password" mysql\_db = "sales\_data" mysql\_table = "sales" # Create a MySQL connection cnx = mysql.connector.connect(user=mysql\_user, password=mysql\_password, host=mysql\_host, database=mysql\_db) # Read data from MySQL table into a pandas dataframe query = f"SELECT \* FROM {mysql\_table}" data = pd.read\_sql(query, con=cnx) # Convert pandas dataframe to PySpark dataframe spark = SparkSession.builder.appName("SalesAnalysis").getOrCreate() df = spark.createDataFrame(data) # calculate total sale for each month monthly\_sales\_df = sales\_df \\ .groupBy(F.month("order\_date").alias("month"), F.year("order\_date").alias("year")) \\ .agg(F.sum("quantity\_ordered" \* "price\_each").alias("total\_sales")) \\ .orderBy(F.desc("total\_sales")) # rank items based on total units sold each month monthly\_item\_sales\_df = sales\_df \\ .groupBy(F.month("order\_date").alias("month"), F.year("order\_date").alias("year"), "product\_name") \\ .agg(F.sum("quantity\_ordered").alias("total\_units\_sold")) \\ .orderBy(F.desc("total\_units\_sold")) # write output to csv files monthly\_sales\_df.write.mode("overwrite").csv("monthly\_sales.csv") monthly\_item\_sales\_df.write.mode("overwrite").csv("monthly\_item\_sales.csv")
+
+The issue with the script is that it is using pandas to read data from MySQL table, but the script is missing the import statement for pandas. Additionally, the script is using `sales_df` to group by and create monthly sales and monthly item sales dataframes, but it should use `df` which is the PySpark dataframe created from the pandas dataframe.
+
+Here's the modified code:
+
+makefile
+
+```makefile
+import pyspark.sql.functions as F
+import mysql.connector
+import pandas as pd
+from pyspark.sql import SparkSession
+
+# MySQL database configuration
+mysql_host = "localhost"
+mysql_user = "root"
+mysql_password = "password"
+mysql_db = "sales_data"
+mysql_table = "sales"
+
+# Create a MySQL connection
+cnx = mysql.connector.connect(user=mysql_user, password=mysql_password,
+                              host=mysql_host, database=mysql_db)
+
+# Read data from MySQL table into a pandas dataframe
+query = f"SELECT * FROM {mysql_table}"
+data = pd.read_sql(query, con=cnx)
+
+# Convert pandas dataframe to PySpark dataframe
+spark = SparkSession.builder.appName("SalesAnalysis").getOrCreate()
+df = spark.createDataFrame(data)
+
+# calculate total sale for each month
+monthly_sales_df = df \
+    .groupBy(F.month("order_date").alias("month"), F.year("order_date").alias("year")) \
+    .agg(F.sum(F.col("quantity_ordered") * F.col("price_each")).alias("total_sales")) \
+    .orderBy(F.desc("total_sales"))
+
+# rank items based on total units sold each month
+monthly_item_sales_df = df \
+    .groupBy(F.month("order_date").alias("month"), F.year("order_date").alias("year"), "product_name") \
+    .agg(F.sum("quantity_ordered").alias("total_units_sold")) \
+    .orderBy(F.desc("total_units_sold"))
+
+# write output to csv files
+monthly_sales_df.write.mode("overwrite").csv("monthly_sales.csv")
+monthly_item_sales_df.write.mode("overwrite").csv("monthly_item_sales.csv")
+```
+
+Make sure to install pandas module in your environment.
+
+> Modify the below portion of the above code such that mysql server defined in the yaml file is used. # MySQL database configuration mysql\_host = "localhost" mysql\_user = "root" mysql\_password = "password" mysql\_db = "sales\_data" mysql\_table = "sales"
+
+To use the MySQL server defined in the docker-compose.yaml file, we can modify the MySQL database configuration as follows:
+
+makefile
+
+```makefile
+# MySQL database configuration
+mysql_host = "mysql"
+mysql_user = "root"
+mysql_password = "password"
+mysql_db = "sales_data"
+mysql_table = "sales"
+```
+
+Here, we are using the `mysql` service name defined in the docker-compose.yaml file as the `mysql_host` value, as this is the network address that the Python script container will use to communicate with the MySQL server container.
+
+> Write requirements.txt file which list all the libraries required for functioning of the application. Use pip to install then in the Dockerfile for that container.
+
+To list all the required libraries, you can use the `pip freeze` command in your local environment. This command generates a list of all installed packages and their versions. You can redirect this output to a `requirements.txt` file using the `>` symbol. Here is an example:
+
+`pip freeze > requirements.txt`
+
+This will create a `requirements.txt` file in the current directory containing all the installed packages and their versions.
+
+In your Dockerfile, you can use the `RUN` command to install the required packages from the `requirements.txt` file. Here is an example:
+
+sql
+
+```sql
+FROM python:3.8
+
+WORKDIR /app
+
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+CMD [ "python", "./app.py" ]
+```
+
+This Dockerfile will first copy the `requirements.txt` file to the container's `/app` directory and then install all the packages listed in the file using `pip`. The `--no-cache-dir` flag is used to prevent the build cache from being used when installing packages, which ensures that the latest versions of the packages are installed.
+
+After installing the packages, the Dockerfile copies the rest of the application code to the container and sets the `CMD` instruction to run the `app.py` script.
+
+> Write the contents of requirements.txt file.
+
+Sure, here's an example of what the contents of a requirements.txt file might look like:
+
+makefile
+
+```makefile
+pyspark==3.2.1
+mysql-connector-python==8.0.27
+pandas==1.3.4
+```
+
+This file includes the names and versions of three Python libraries that the application depends on: `pyspark`, `mysql-connector-python`, and `pandas`. You can include additional libraries in the file, each on a separate line. To install these libraries using pip in the Dockerfile, you would add the following line:
+
+bash
+
+```bash
+RUN pip install -r /path/to/requirements.txt
+```
+
+where `/path/to/requirements.txt` is the path to the requirements.txt file within the Docker container.
