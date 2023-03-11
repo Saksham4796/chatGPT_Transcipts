@@ -6,3 +6,4 @@ This repo holds the transcripts for solving a diversity of Complex Problem using
 
 2. Competetive Style Algorithmic Problems:  
    i) Leetcode Problem - 1 : [K-Concatenation Maximum Sum](https://leetcode.com/problems/k-concatenation-maximum-sum/)
+   ii) Leetcode Problem - 2 : [Valid Parenthesis String](https://leetcode.com/problems/valid-parenthesis-string/)
