@@ -13,7 +13,8 @@ This repo holds the transcripts for solving a diversity of Complex Problem using
    vi) Leetcode Problem - 6(Divide and Conquer) : [Super Pow](https://leetcode.com/problems/super-pow/) &#8594; [Transcipt](https://github.com/Saksham4796/chatGPT_Transcipts/blob/master/CP_Problem_6.md)  
    vii) Leetcode Problem - 7(Greedy) : [Append K Integers With Minimal Sum](https://leetcode.com/problems/append-k-integers-with-minimal-sum/) &#8594; [Transcipt](https://github.com/Saksham4796/chatGPT_Transcipts/blob/master/CP_Problem_7.md)  
    viii) Leetcode Problem - 8(Greedy) : [Maximize the Topmost Element After K Moves](https://leetcode.com/problems/maximize-the-topmost-element-after-k-moves/) &#8594; [Transcipt](https://github.com/Saksham4796/chatGPT_Transcipts/blob/master/CP_Problem_8.md)  
-   ix) Leetcode Problem - 9(Ordered Set) : [Minimum Absolute Sum Difference](https://leetcode.com/problems/minimum-absolute-sum-difference/) &#8594; [Transcipt](https://github.com/Saksham4796/chatGPT_Transcipts/blob/master/CP_Problem_9.md)
+   ix) Leetcode Problem - 9(Ordered Set) : [Minimum Absolute Sum Difference](https://leetcode.com/problems/minimum-absolute-sum-difference/) &#8594; [Transcipt](https://github.com/Saksham4796/chatGPT_Transcipts/blob/master/CP_Problem_9.md)  
+   x) Leetcode Problem - 10(Recursion) : [Number of Digit One](https://leetcode.com/problems/number-of-digit-one/) &#8594; [Transcipt](https://github.com/Saksham4796/chatGPT_Transcipts/blob/master/CP_Problem_10.md)
 
 
 **Note:** For `Leetcode Problem 7` and `Leetcode Problem 8`, the correct JAVA code was given as the prompt to chatGPT in order to get correct solution.
