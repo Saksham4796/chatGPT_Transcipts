@@ -15,15 +15,4 @@ This repo holds the transcripts for solving a diversity of Complex Problem using
    viii) Leetcode Problem - 8(Greedy) : [Maximize the Topmost Element After K Moves](https://leetcode.com/problems/maximize-the-topmost-element-after-k-moves/) &#8594; [Transcipt](https://github.com/Saksham4796/chatGPT_Transcipts/blob/master/CP_Problem_8.md)
 
 
-> <div class="note">
-> This is a note.
-> </div>
->
-> <style>
-> .note {
->   border: 1px solid #ccc;
->   background-color: #f9f9f9;
->   padding: 10px;
->   margin-bottom: 10px;
-> }
-> </style>
+**Note:** For `Leetcode Problem 7` and `Leetcode Problem 8`, the correct JAVA code was given as the prompt to chatGPT in order to get correct solution.
