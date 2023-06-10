@@ -19,4 +19,4 @@ This repo holds the transcripts for solving a diversity of Complex Problem using
 
 **Note:** For `Leetcode Problem 7` and `Leetcode Problem 8`, the correct JAVA code was given as the prompt to chatGPT in order to get correct solution.
 
-3. Synthesis of Benchmarks for Lambda Square Paper - [Type and Example Directed Program Synthesis](https://www.cis.upenn.edu/~stevez/papers/OZ15.pdf) &#8594; [Transcipt](), [Notebook](https://github.com/Saksham4796/chatGPT_Transcipts/blob/master/Benchmarks_for_Lambda_Square.ipynb) 
+3. Synthesis of Benchmarks for Lambda Square Paper - [Type and Example Directed Program Synthesis](https://www.cis.upenn.edu/~stevez/papers/OZ15.pdf) &#8594; [Notebook](https://github.com/Saksham4796/chatGPT_Transcipts/blob/master/Benchmarks_for_Lambda_Square.ipynb) 
